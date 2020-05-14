@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 FILE *in, *out;
 
@@ -33,12 +34,12 @@ static void print(float n)
   ssize_t r;
   float f;
 
-  fprintf(out, "#sample out env\n");
+  fprintf(out, "#sample out env sqrt(env)\n");
   i = 0;
   while ((r = fread(&f, sizeof(float), 1, in)) == 1)
     {
       float e = env(f)/n;
-      fprintf(out, "%ld %f %f\n", i++, f, e);
+      fprintf(out, "%ld %f %f %f\n", i++, f, e, sqrtf(e));
     }
 }
 
