@@ -7,6 +7,7 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 FILE *in, *out;
 
@@ -26,24 +27,32 @@ static float env(float f)
   return lmax;
 }
 
-static void print(void)
+static void print(float n)
 {
   unsigned long i;
   ssize_t r;
   float f;
 
-  fprintf(out, "sample out env\n");
+  fprintf(out, "#sample out env\n");
   i = 0;
   while ((r = fread(&f, sizeof(float), 1, in)) == 1)
-    fprintf(out, "%ld %f %f\n", i++, f, env(f));
+    {
+      float e = env(f)/n;
+      fprintf(out, "%ld %f %f\n", i++, f, e);
+    }
 }
 
 int main(int argc, char *argv[])
 {
+  float norm = 1.0;
+
   in = stdin;
   out = stdout;
 
-  print();
+  if (argc >= 2)
+    norm = (float)atof(argv[1]);
+
+  print(norm);
 
   return 0;
 }
